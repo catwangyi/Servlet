@@ -9,8 +9,9 @@ import java.sql.DriverManager;
  * @desc jdbc连接测试
  **/
 public class JDBCUtils {
-    Connection con;
+    private final String DBName = "faceid";
     public Connection getCon(){
+        Connection con = null;
         try {
             Class.forName("org.gjt.mm.mysql.Driver");
             System.out.println("驱动连接成功！");
@@ -18,7 +19,7 @@ public class JDBCUtils {
             e.printStackTrace();
         }
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test?useSSL=false","root","mysql");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+DBName+"?useSSL=false","root","mysql");
             System.out.println("数据库连接成功");
         }catch (Exception e){
             e.printStackTrace();
@@ -26,8 +27,4 @@ public class JDBCUtils {
         return con;
     }
 
-    public static void main(String[] args) {
-        JDBCUtils t = new JDBCUtils();
-        t.getCon();
-    }
 }

@@ -13,10 +13,26 @@
         <servlet-name>upload</servlet-name>
         <servlet-class>Servlet.UploadServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>getinfo</servlet-name>
+        <servlet-class>Servlet.GetInfoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>jwdServlet</servlet-name>
+        <servlet-class>Servlet.jwdServlet</servlet-class>
+    </servlet>
 <!--    配置访问方式-->
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>jwdServlet</servlet-name>
+        <url-pattern>/jwd</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getinfo</servlet-name>
+        <url-pattern>/getinfo</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>login</servlet-name>

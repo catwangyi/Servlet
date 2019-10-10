@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
          jdbcUtils = new JDBCUtils();
-         connection = jdbcUtils.getCon();
+         connection = jdbcUtils.getCon("faceid");
     }
 
     @Override
@@ -39,6 +39,9 @@ public class LoginServlet extends HttpServlet {
         String et_id = req.getParameter("id");
         String et_pwd = req.getParameter("pwd");
         try {
+            if (connection==null){
+                init();
+            }
             Statement sql = connection.createStatement();
             ResultSet res = sql.executeQuery("select pwd,name,phone from user where id = "+et_id);
             if (res.next()){
@@ -47,7 +50,8 @@ public class LoginServlet extends HttpServlet {
                     String name = res.getString("name");
                     resp.setHeader("Name",URLEncoder.encode(name,"utf-8"));
                     resp.setHeader("Phone",res.getString("phone"));
-                    System.out.println("Success");
+                    resp.setHeader("userid",et_id);
+                    //System.out.println("Success");
                 }else{
                     resp.setHeader("Statu","WrongPWD");
                     System.out.println("WrongPWD");
@@ -56,7 +60,8 @@ public class LoginServlet extends HttpServlet {
                 resp.setHeader("Statu","NoSuchID");
                 System.out.println("NoSuchID");
             }
-        }catch (SQLException e){
+            res.close();
+        }catch (Exception e){
             System.out.println("出错了");
             e.printStackTrace();
         }

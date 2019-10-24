@@ -31,7 +31,7 @@ public class UploadServlet extends HttpServlet {
     Connection connection;
     Part part;
     String rec_flag="error";
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Override
     public void init() throws ServletException {
         jdbcUtils = new JDBCUtils();
@@ -41,12 +41,12 @@ public class UploadServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp){
         try {
-            part=req.getPart("img");
-            String userid = req.getParameter("userid");
+            part=req.getPart("img");//获得图片
+            String id = req.getParameter("id");
             InputStream is = part.getInputStream();
             String filename = URLDecoder.decode(req.getParameter("imgname"),"UTF-8");
             //System.out.println(filename);
-            File file = new File("C:\\Users\\wang\\Desktop\\test\\"+filename);
+            File file = new File("C:\\Users\\wang\\Desktop\\face\\test\\"+filename);
             OutputStream os = null;
             os = new FileOutputStream(file,false);
             byte[] bytes = new byte[1024];
@@ -58,8 +58,8 @@ public class UploadServlet extends HttpServlet {
             is.close();
 
             //执行识别程序
-            rec_flag = PyUtils.recogFace("C:\\Users\\wang\\Desktop\\test.py",file.getPath());
-            System.out.println(rec_flag);
+            rec_flag = PyUtils.recogFace("D:\\Python\\face_recognition-test\\face_project.py","2",file.getPath(),id);
+            System.out.println("rec_flag:"+rec_flag);
             if (rec_flag.equals("success")){
                 try {
                     if (connection==null){
@@ -85,10 +85,10 @@ public class UploadServlet extends HttpServlet {
                         statu = "LATE";
                     }
 
-                    sql.executeUpdate(formatSQL(userid,cur_time,statu));
+                    sql.executeUpdate(formatSQL(id,cur_time,statu));
                     resp.setHeader("statu","success");
                 }catch (SQLException e){
-                    System.out.println("出错了");
+                    System.out.println("数据库出错了");
                     e.printStackTrace();
                 }
 

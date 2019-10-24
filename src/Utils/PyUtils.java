@@ -9,30 +9,32 @@ import java.io.InputStreamReader;
  * @desc
  **/
 public class PyUtils {
-    public static String recogFace(String PyPath,String ImgPath){
-        String result = "error";
+    public static String recogFace(String PyPath,String statu,String ImgPath,String id){
+        String result = new String();
         Process proc;
-        String[] str = new String[] { "D:\\anaconda\\envs\\tensorflow\\python.exe", PyPath, ImgPath};
+        String[] str = new String[] { "D:\\anaconda\\envs\\dlib\\python.exe", PyPath, statu,ImgPath,id};
         try {
             proc = Runtime.getRuntime().exec(str);//执行py文件
             //用输入输出流来截取结果
             BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
             String line = null;
-            if ((line = in.readLine())!=null){
+            while ((line = in.readLine())!=null){
+                System.out.println("line:"+line);
                 if (line.equals("success")){
                     result = "success";
-                }else{
+                }else if(line.equals("wrong")){
                     result = "wrong";
+                }else if(line.equals("noface")){
+                    result = "noface";
                 }
             }
             in.close();
             proc.waitFor();
         }catch (Exception e){
             e.printStackTrace();
-
-            result = "error";
         }finally {
             return result;
         }
     }
+
 }
